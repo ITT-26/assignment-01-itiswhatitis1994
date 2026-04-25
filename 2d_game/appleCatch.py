@@ -32,9 +32,10 @@ LOWEST_TILT = -5
 HIGHEST_TILT = 5
 RANGE = 10
 BASKET_MOVEMENT_WIDTH = WINDOW_WIDTH - 64
-ITEM_HEIGHT = 32
+ITEM_SIZE = 32
 BASKET_WIDTH = 64
 UPDATE_TIME = 20
+COLLISION_TOLERANCE = 16
 
 background_image = pyglet.resource.image('background.png')
 background = pyglet.sprite.Sprite(background_image, x=0, y=0)
@@ -116,17 +117,11 @@ def checkOutOfBounds(list, item):
     if (item.y <= 0):
         list.remove(item)
 def checkInBasket(list, item, type):
-    global basket, fall_speed, score, lives, label, gameState
-    if (type == "apple"):
-        width = 27
-    if (type == "bomb"):
-        width = 32
-    else:
-        pass
+    global basket, fall_speed, score, lives, label, gameState, loss
     #checks if item was  not already below basket when it collides with it
-    if (item.y - ITEM_HEIGHT >= basket.y):
+    if (item.y - ITEM_SIZE >= basket.y):
         #checks if item is within basket parameters
-        if (item.y - ITEM_HEIGHT - fall_speed < basket.y and item.x > basket.x and item.x + width < basket.x + BASKET_WIDTH):
+        if (item.y - ITEM_SIZE - fall_speed < basket.y and item.x >= basket.x - COLLISION_TOLERANCE and item.x + ITEM_SIZE <= basket.x + BASKET_WIDTH + COLLISION_TOLERANCE):
             list.remove(item)
             if (type == "apple"):
                 score += 10
@@ -136,6 +131,7 @@ def checkInBasket(list, item, type):
                 lives -= 1
                 if (lives == 0):
                     gameState = 2
+                    loss.text = f"You lost!\nScore: {score}\nPress Button 1 to restart game."
                 label.text = f"Score: {score}   Lives: {lives}"
 
 #checks if items on screen either move out of screen or land in basket
