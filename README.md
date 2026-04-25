@@ -6,7 +6,6 @@ I added demo_event.py from the exercises to test if my code works and removed th
 
 ## Requirements for AppleCatch
 - Game requires a full-HD screen resolution
-- no other packages to install
 
 ## AppleCatch Rules
 - Use your phone in landscape mode and tilt it left or right to move the basket accordingly
